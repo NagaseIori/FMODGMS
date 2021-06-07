@@ -1,12 +1,12 @@
 /*--------------------------------------------------------
 //  fmodgms.cpp
 //
-//  FMODGMS v.0.10.1
+//  FMODGMS v.0.10.1c
 //
-//  GML bindings to the FMOD Studio low-level API for
+//  GML bindings to the FMOD Core API for
 //  GameMaker:Studio.
 //
-//  FMOD Studio version: 1.10.07
+//  FMOD Core API version: 2.01.10
 ----------------------------------------------------------*/
 
 #ifndef FMODGMS_CPP
@@ -498,14 +498,13 @@ GMexport double FMODGMS_Snd_LoadSound_Ext(char* location, double mode, uint64_t*
 		_exInfo.fileuserdata = (void*)exInfo[24];
 		_exInfo.filebuffersize = (int)exInfo[25];
 		_exInfo.channelorder = (FMOD_CHANNELORDER)exInfo[26];
-		_exInfo.channelmask = (FMOD_CHANNELMASK)exInfo[27];
 		_exInfo.initialsoundgroup = 0; //not supported
-		_exInfo.initialseekposition = (unsigned int)exInfo[29];
-		_exInfo.initialseekpostype = (FMOD_TIMEUNIT)exInfo[30];
-		_exInfo.ignoresetfilesystem = (int)exInfo[31];
-		_exInfo.audioqueuepolicy = (unsigned int)exInfo[32];
-		_exInfo.minmidigranularity = (unsigned int)exInfo[33];
-		_exInfo.nonblockthreadid = (unsigned int)exInfo[34];
+		_exInfo.initialseekposition = (unsigned int)exInfo[28];
+		_exInfo.initialseekpostype = (FMOD_TIMEUNIT)exInfo[29];
+		_exInfo.ignoresetfilesystem = (int)exInfo[30];
+		_exInfo.audioqueuepolicy = (unsigned int)exInfo[31];
+		_exInfo.minmidigranularity = (unsigned int)exInfo[32];
+		_exInfo.nonblockthreadid = (unsigned int)exInfo[33];
 		_exInfo.fsbguid = 0; //not supported
 		result = sys->createSound(location, _mode, &_exInfo, &sound);
 	}
@@ -1883,7 +1882,7 @@ GMexport const char* FMODGMS_Snd_Get_TagStringFromIndex(double soundIndex, doubl
 			FMOD_TAG tag;
 			soundList[si]->getTag(0, ti, &tag);
 
-			if (tag.datatype >= FMOD_TAGDATATYPE_STRING && tag.datatype < FMOD_TAGDATATYPE_CDTOC)
+			if (tag.datatype >= FMOD_TAGDATATYPE_STRING && tag.datatype < FMOD_TAGDATATYPE_MAX)
 			{
 				// 8-bit string
 				if (tag.datatype == FMOD_TAGDATATYPE_STRING || tag.datatype == FMOD_TAGDATATYPE_STRING_UTF8)
@@ -2121,9 +2120,9 @@ GMexport const char* FMODGMS_Snd_Get_TagStringFromName(double soundIndex, char* 
 
 		if (tagFound)
 		{
-			if (tag.datatype >= FMOD_TAGDATATYPE_STRING && tag.datatype < FMOD_TAGDATATYPE_CDTOC)
+			if (tag.datatype >= FMOD_TAGDATATYPE_STRING && tag.datatype < FMOD_TAGDATATYPE_MAX)
 			{
-				if (tag.datatype >= FMOD_TAGDATATYPE_STRING && tag.datatype < FMOD_TAGDATATYPE_CDTOC)
+				if (tag.datatype >= FMOD_TAGDATATYPE_STRING && tag.datatype < FMOD_TAGDATATYPE_MAX)
 				{
 					// 8-bit string
 					if (tag.datatype == FMOD_TAGDATATYPE_STRING || tag.datatype == FMOD_TAGDATATYPE_STRING_UTF8)
