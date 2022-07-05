@@ -461,6 +461,10 @@ GMexport double FMODGMS_Snd_LoadStream(char* filename)
 // The buffer must be 8 byte aligned. Values should be unsigned.
 // It must contain every value for FMOD_CREATESOUNDEXINFO in correct order as documented in fmod.
 // Use value 0 for default settings.
+GMexport double FMODGMS_Snd_LoadSound_Ext2(char* location, double mode) {
+	return FMODGMS_Snd_LoadSound_Ext(location, mode, 0);
+}
+
 GMexport double FMODGMS_Snd_LoadSound_Ext(char* location, double mode, uint64_t* exInfo)
 {
 	FMOD::Sound* sound = NULL;
