@@ -26,30 +26,30 @@
 #pragma region Global variables
 
 // System Stuff
-FMOD::System *sys = NULL;
+FMOD::System* sys = NULL;
 std::unordered_map <std::size_t, FMOD::Channel*> channelList;
 std::size_t nChannels = 0;
 std::unordered_map <std::size_t, FMOD::Sound*> soundList;
 std::size_t nSounds = 0;
 std::unordered_map <std::size_t, FMOD::DSP*> effectList;
 std::size_t nEffects = 0;
-FMOD::ChannelGroup *masterGroup;
+FMOD::ChannelGroup* masterGroup;
 FMOD_RESULT result;
 const char* errorMessage;
 std::string tagString;
 
 // DLS stuff
-FMOD_CREATESOUNDEXINFO *soundParams = new FMOD_CREATESOUNDEXINFO();
+FMOD_CREATESOUNDEXINFO* soundParams = new FMOD_CREATESOUNDEXINFO();
 std::string dlsName;
 
 // Spectrum DSP Stuff
-FMOD::DSP *fftdsp = NULL;
+FMOD::DSP* fftdsp = NULL;
 float domFreq;
 int playbackRate = 48000;
 int windowSize = 128;
 int nyquist = windowSize / 2;
 std::vector <float> binValues(nyquist);
-FMOD_DSP_PARAMETER_FFT *fftParams;
+FMOD_DSP_PARAMETER_FFT* fftParams;
 
 // Unicode stuff
 //std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> u16Converter;
@@ -99,7 +99,7 @@ GMexport double FMODGMS_Sys_Update()
 
 	if (playState && fftdsp != NULL)
 	{
-		result = fftdsp->getParameterData(FMOD_DSP_FFT_SPECTRUMDATA, (void **)&fftParams, 0, 0, 0);
+		result = fftdsp->getParameterData(FMOD_DSP_FFT_SPECTRUMDATA, (void**)&fftParams, 0, 0, 0);
 		if (result != FMOD_OK)
 			return FMODGMS_Util_ErrorChecker();
 
@@ -413,7 +413,7 @@ GMexport double FMODGMS_FFT_Normalize()
 // Loads a sound and indexes it in soundList
 GMexport double FMODGMS_Snd_LoadSound(char* filename)
 {
-	FMOD::Sound *sound = NULL;
+	FMOD::Sound* sound = NULL;
 	result = sys->createSound(filename, FMOD_DEFAULT, soundParams, &sound);
 
 	// we cool?
@@ -434,7 +434,7 @@ GMexport double FMODGMS_Snd_LoadSound(char* filename)
 // Loads a sound toa stream and indexes it in soundList
 GMexport double FMODGMS_Snd_LoadStream(char* filename)
 {
-	FMOD::Sound *sound;
+	FMOD::Sound* sound;
 	result = sys->createStream(filename, FMOD_DEFAULT, soundParams, &sound);
 
 	// we cool?
@@ -463,7 +463,7 @@ GMexport double FMODGMS_Snd_LoadStream(char* filename)
 // Use value 0 for default settings.
 GMexport double FMODGMS_Snd_LoadSound_Ext(char* location, double mode, uint64_t* exInfo)
 {
-	FMOD::Sound *sound = NULL;
+	FMOD::Sound* sound = NULL;
 	FMOD_MODE _mode = FMOD_DEFAULT | (unsigned int)(mode + 0.5);
 
 	//if exInfo is used, transfer data to struct and pass to createSound
@@ -498,7 +498,7 @@ GMexport double FMODGMS_Snd_LoadSound_Ext(char* location, double mode, uint64_t*
 		_exInfo.fileuserdata = (void*)exInfo[24];
 		_exInfo.filebuffersize = (int)exInfo[25];
 		_exInfo.channelorder = (FMOD_CHANNELORDER)exInfo[26];
-		_exInfo.channelmask = (FMOD_CHANNELMASK)exInfo[27];
+		//_exInfo.channelmask = (FMOD_CHANNELMASK)exInfo[27];
 		_exInfo.initialsoundgroup = 0; //not supported
 		_exInfo.initialseekposition = (unsigned int)exInfo[29];
 		_exInfo.initialseekpostype = (FMOD_TIMEUNIT)exInfo[30];
@@ -648,7 +648,7 @@ GMexport double FMODGMS_Snd_Set_LoopPoints(double index, double startTimeInSampl
 		int s = (int)round(startTimeInSamples);
 		int e = (int)round(endTimeInSamples);
 
-		result = soundList[i]->setLoopPoints(s, FMOD_TIMEUNIT_PCM, e, FMOD_TIMEUNIT_PCM);
+		result = soundList[i]->setLoopPoints(s, FMOD_TIMEUNIT_MS, e, FMOD_TIMEUNIT_MS);
 
 		return FMODGMS_Util_ErrorChecker();
 	}
@@ -731,7 +731,7 @@ GMexport double FMODGMS_Snd_Get_LoopPoints(double index, double whichOne)
 		unsigned int start = 0;
 		unsigned int end = 0;
 
-		soundList[i]->getLoopPoints(&start, FMOD_TIMEUNIT_PCM, &end, FMOD_TIMEUNIT_PCM);
+		soundList[i]->getLoopPoints(&start, FMOD_TIMEUNIT_MS, &end, FMOD_TIMEUNIT_MS);
 
 		if (whichOne < 1.0)
 			return (double)start;
@@ -754,7 +754,7 @@ GMexport double FMODGMS_Snd_Get_Length(double index)
 	if (soundList.count(i) == 1)
 	{
 		unsigned int len;
-		soundList[i]->getLength(&len, FMOD_TIMEUNIT_PCM);
+		soundList[i]->getLength(&len, FMOD_TIMEUNIT_MS);
 		return (double)len;
 	}
 
@@ -991,7 +991,7 @@ GMexport double FMODGMS_Snd_ReadData(double index, double pos, double length, vo
 // Creates a new channel
 GMexport double FMODGMS_Chan_CreateChannel()
 {
-	FMOD::Channel *chan = NULL;
+	FMOD::Channel* chan = NULL;
 	channelList.emplace(nChannels++, chan);
 
 	errorMessage = "No errors.";
@@ -1128,7 +1128,7 @@ GMexport double FMODGMS_Chan_Set_Position(double channel, double pos)
 
 	if (channelList.count(c) == 1)
 	{
-		result = channelList[c]->setPosition(p, FMOD_TIMEUNIT_PCM);
+		result = channelList[c]->setPosition(p, FMOD_TIMEUNIT_MS);
 		errorMessage = "No errors.";
 		return GMS_true;
 	}
@@ -1212,7 +1212,7 @@ GMexport double FMODGMS_Chan_Set_ModOrder(double channel, double ord)
 	if (channelList.count(c) == 1)
 	{
 		// get handle of sound currently playing in channel
-		FMOD::Sound *snd;
+		FMOD::Sound* snd;
 		channelList[c]->getCurrentSound(&snd);
 
 		// check to see if the sound is a module
@@ -1259,7 +1259,7 @@ GMexport double FMODGMS_Chan_Set_ModRow(double channel, double row)
 	if (channelList.count(c) == 1)
 	{
 		// get handle of sound currently playing in channel
-		FMOD::Sound *snd;
+		FMOD::Sound* snd;
 		channelList[c]->getCurrentSound(&snd);
 
 		// check to see if the sound is a module
@@ -1331,7 +1331,7 @@ GMexport double FMODGMS_Chan_Get_Position(double channel)
 		*/
 
 		unsigned int pos;
-		channelList[c]->getPosition(&pos, FMOD_TIMEUNIT_PCM);
+		channelList[c]->getPosition(&pos, FMOD_TIMEUNIT_MS);
 		errorMessage = "No errors.";
 		return (double)pos;
 	}
@@ -1415,7 +1415,7 @@ GMexport double FMODGMS_Chan_Get_ModOrder(double channel)
 	if (channelList.count(c) == 1)
 	{
 		// get handle of sound currently playing in channel
-		FMOD::Sound *snd;
+		FMOD::Sound* snd;
 		channelList[c]->getCurrentSound(&snd);
 
 		// check to see if the sound is a module
@@ -1457,7 +1457,7 @@ GMexport double FMODGMS_Chan_Get_ModPattern(double channel)
 	if (channelList.count(c) == 1)
 	{
 		// get handle of sound currently playing in channel
-		FMOD::Sound *snd;
+		FMOD::Sound* snd;
 		channelList[c]->getCurrentSound(&snd);
 
 		// check to see if the sound is a module
@@ -1499,7 +1499,7 @@ GMexport double FMODGMS_Chan_Get_ModRow(double channel)
 	if (channelList.count(c) == 1)
 	{
 		// get handle of sound currently playing in channel
-		FMOD::Sound *snd;
+		FMOD::Sound* snd;
 		channelList[c]->getCurrentSound(&snd);
 
 		// check to see if the sound is a module
@@ -1833,14 +1833,14 @@ GMexport double FMODGMS_Snd_Get_TagRealFromIndex(double soundIndex, double tagIn
 
 			if (tag.datatype == FMOD_TAGDATATYPE_INT)
 			{
-				int *i = (int*)tag.data;
+				int* i = (int*)tag.data;
 				double rt = (double)*i;
 				return rt;
 			}
 
 			else if (tag.datatype == FMOD_TAGDATATYPE_FLOAT)
 			{
-				float *f = (float*)tag.data;
+				float* f = (float*)tag.data;
 				return (double)*f;
 			}
 
@@ -2061,14 +2061,14 @@ GMexport double FMODGMS_Snd_Get_TagRealFromName(double soundIndex, char* tagName
 		{
 			if (tag.datatype == FMOD_TAGDATATYPE_INT)
 			{
-				int *i = (int*)tag.data;
+				int* i = (int*)tag.data;
 				double rt = (double)*i;
 				return rt;
 			}
 
 			else if (tag.datatype == FMOD_TAGDATATYPE_FLOAT)
 			{
-				float *f = (float*)tag.data;
+				float* f = (float*)tag.data;
 				return (double)*f;
 			}
 
@@ -2435,7 +2435,7 @@ GMexport double FMODGMS_Util_FFT(float* bufferIn, float* bufferOut, double numPo
 	float bufferInTemp[4096];
 	for (int i = 0; i < _numPoints; i++)
 	{
-		bufferInTemp[i] = bufferIn[i] * powf(sinf((float)3.141592*i / (_numPoints - 1)), 2);
+		bufferInTemp[i] = bufferIn[i] * powf(sinf((float)3.141592 * i / (_numPoints - 1)), 2);
 		loudness += pow(bufferInTemp[i], 2);
 	}
 
@@ -2451,7 +2451,7 @@ GMexport double FMODGMS_Util_FFT(float* bufferIn, float* bufferOut, double numPo
 	kiss_fftr(cfg, bufferInTemp, bufferOutTemp);
 	for (int i = 0; i < numPointsQuarter; i++)
 	{
-		bufferOut[i] = (sqrt(bufferOutTemp[i].i*bufferOutTemp[i].i + bufferOutTemp[i].r*bufferOutTemp[i].r) / _numPoints);
+		bufferOut[i] = (sqrt(bufferOutTemp[i].i * bufferOutTemp[i].i + bufferOutTemp[i].r * bufferOutTemp[i].r) / _numPoints);
 	}
 
 	//optional normalizing
@@ -2492,15 +2492,15 @@ double FMODGMS_Util_ErrorChecker()
 }
 
 // Helper function: converts UTF-16 characters in a string to ASCII if possible
-void u16ToASCII(std::u16string const &s)
+void u16ToASCII(std::u16string const& s)
 {
 	std::string out;
 
 	std::transform(begin(s), end(s), back_inserter(out), [](char16_t c)
-	{
-		if (c < 255) return (char)c;
-		else return '?';
-	});
+		{
+			if (c < 255) return (char)c;
+			else return '?';
+		});
 
 	tagString = out;
 }
