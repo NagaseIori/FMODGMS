@@ -6,7 +6,7 @@
 //  GML bindings to the FMOD Studio low-level API for
 //  GameMaker:Studio.
 //
-//  FMOD Studio version: 1.10.07
+//  FMOD Studio version: 1.10.20
 ----------------------------------------------------------*/
 
 #ifndef FMODGMS_CPP
