@@ -1,7 +1,7 @@
 /*$ preserve start $*/
 
 /* ================================================================================================== */
-/* FMOD Studio - Common C/C++ header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2020. */
+/* FMOD Studio - Common C/C++ header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2018. */
 /*                                                                                                    */
 /* This header is included by fmod.hpp (C++ interface) and fmod.h (C interface) therefore is the      */
 /* base header for all FMOD headers.                                                                  */
@@ -15,7 +15,7 @@
     0xaaaabbcc -> aaaa = major version number.  bb = minor version number.  cc = development version number.
 */
 
-#define FMOD_VERSION    0x00011020
+#define FMOD_VERSION    0x00011007
 
 /*
     Compiler specific settings.
@@ -31,7 +31,7 @@
 
 #if defined(_WIN32) || defined(__CYGWIN__) || defined(__ORBIS__) || defined(__psp2__)
     #define F_EXPORT __declspec(dllexport)
-#elif defined(__APPLE__) || defined(__ANDROID__) || defined(__linux__) || defined(F_USE_ATTRIBUTE)
+#elif defined(__APPLE__) || defined(__ANDROID__) || defined(__linux__)
     #define F_EXPORT __attribute__((visibility("default")))
 #else
     #define F_EXPORT
@@ -86,7 +86,7 @@ typedef unsigned long long         FMOD_PORT_INDEX;
     [SEE_ALSO]      
 ]
 */
-typedef enum FMOD_RESULT
+typedef enum
 {
     FMOD_OK,                        /* No errors. */
     FMOD_ERR_BADCOMMAND,            /* Tried to call a function on a data type that does not allow this type of functionality (ie calling Sound::lock on a streaming sound). */
@@ -191,7 +191,7 @@ typedef enum FMOD_RESULT
     ChannelGroup::setCallback
 ]
 */
-typedef enum FMOD_CHANNELCONTROL_TYPE
+typedef enum
 {
     FMOD_CHANNELCONTROL_CHANNEL,
     FMOD_CHANNELCONTROL_CHANNELGROUP,
@@ -231,7 +231,7 @@ typedef enum FMOD_CHANNELCONTROL_TYPE
     FMOD_INITFLAGS
 ]
 */
-typedef struct FMOD_VECTOR
+typedef struct
 {
     float x;        /* X coordinate in 3D space. */
     float y;        /* Y coordinate in 3D space. */
@@ -356,7 +356,7 @@ struct FMOD_ASYNCREADINFO
     System::update
 ]
 */
-typedef enum FMOD_OUTPUTTYPE
+typedef enum
 {
     FMOD_OUTPUTTYPE_AUTODETECT,      /* Picks the best output mode for the platform. This is the default. */
 
@@ -404,7 +404,7 @@ typedef enum FMOD_OUTPUTTYPE
     FMOD_Debug_Initialize
 ]
 */
-typedef enum FMOD_DEBUG_MODE
+typedef enum
 {
     FMOD_DEBUG_MODE_TTY,             /* Default log location per platform, i.e. Visual Studio output window, stderr, LogCat, etc */
     FMOD_DEBUG_MODE_FILE,            /* Write log to specified file path */
@@ -647,7 +647,7 @@ typedef enum FMOD_SPEAKERMODE
     System::getSpeakerPosition
 ]
 */
-typedef enum FMOD_SPEAKER
+typedef enum
 {
     FMOD_SPEAKER_FRONT_LEFT,        /* The front left speaker */
     FMOD_SPEAKER_FRONT_RIGHT,       /* The front right speaker */
@@ -752,7 +752,7 @@ typedef enum FMOD_CHANNELORDER
     System::unloadPlugin
 ]
 */
-typedef enum FMOD_PLUGINTYPE
+typedef enum
 {
     FMOD_PLUGINTYPE_OUTPUT,          /* The plugin type is an output module.  FMOD mixed audio will play through one of these devices */
     FMOD_PLUGINTYPE_CODEC,           /* The plugin type is a file format codec.  FMOD will use these codecs to load file formats for playback. */
@@ -833,7 +833,7 @@ typedef struct FMOD_PLUGINLIST
     Sound::getFormat
 ]
 */
-typedef enum FMOD_SOUND_TYPE
+typedef enum
 {
     FMOD_SOUND_TYPE_UNKNOWN,         /* 3rd party / unknown plugin format. */
     FMOD_SOUND_TYPE_AIFF,            /* AIFF. */
@@ -879,7 +879,7 @@ typedef enum FMOD_SOUND_TYPE
     Sound::getFormat
 ]
 */
-typedef enum FMOD_SOUND_FORMAT
+typedef enum
 {
     FMOD_SOUND_FORMAT_NONE,             /* Unitialized / unknown. */
     FMOD_SOUND_FORMAT_PCM8,             /* 8bit integer PCM data. */
@@ -982,7 +982,7 @@ typedef enum FMOD_SOUND_FORMAT
     FMOD_MODE
 ]
 */
-typedef enum FMOD_OPENSTATE
+typedef enum
 {
     FMOD_OPENSTATE_READY = 0,       /* Opened and ready to play. */
     FMOD_OPENSTATE_LOADING,         /* Initial load in progress. */
@@ -1018,7 +1018,7 @@ typedef enum FMOD_OPENSTATE
     SoundGroup::getMuteFadeSpeed
 ]
 */
-typedef enum FMOD_SOUNDGROUP_BEHAVIOR
+typedef enum 
 {
     FMOD_SOUNDGROUP_BEHAVIOR_FAIL,              /* Any sound played that puts the sound count over the SoundGroup::setMaxAudible setting, will simply fail during System::playSound. */
     FMOD_SOUNDGROUP_BEHAVIOR_MUTE,              /* Any sound played that puts the sound count over the SoundGroup::setMaxAudible setting, will be silent, then if another sound in the group stops the sound that was silent before becomes audible again. */
@@ -1048,7 +1048,7 @@ typedef enum FMOD_SOUNDGROUP_BEHAVIOR
     System::update
 ]
 */
-typedef enum FMOD_CHANNELCONTROL_CALLBACK_TYPE
+typedef enum
 {
     FMOD_CHANNELCONTROL_CALLBACK_END,                  /* Called when a sound ends. */
     FMOD_CHANNELCONTROL_CALLBACK_VIRTUALVOICE,         /* Called when a voice is swapped out or swapped in. */
@@ -1076,7 +1076,7 @@ typedef enum FMOD_CHANNELCONTROL_CALLBACK_TYPE
     ChannelControl::setDSPIndex
 ]
 */
-typedef enum FMOD_CHANNELCONTROL_DSP_INDEX
+typedef enum
 {
     FMOD_CHANNELCONTROL_DSP_HEAD = -1,          /* Head of the DSP chain.   Equivalent of index 0. */
     FMOD_CHANNELCONTROL_DSP_FADER = -2,         /* Built in fader DSP. */
@@ -1097,7 +1097,7 @@ typedef enum FMOD_CHANNELCONTROL_DSP_INDEX
     [SEE_ALSO]      
 ]
 */
-typedef enum FMOD_ERRORCALLBACK_INSTANCETYPE
+typedef enum
 {
     FMOD_ERRORCALLBACK_INSTANCETYPE_NONE,
     FMOD_ERRORCALLBACK_INSTANCETYPE_SYSTEM,
@@ -1135,7 +1135,7 @@ typedef enum FMOD_ERRORCALLBACK_INSTANCETYPE
     FMOD_ERRORCALLBACK_INSTANCETYPE
 ]
 */
-typedef struct FMOD_ERRORCALLBACK_INFO
+typedef struct
 {
     FMOD_RESULT                      result;                     /* Error code result */
     FMOD_ERRORCALLBACK_INSTANCETYPE  instancetype;               /* Type of instance the error occurred on */
@@ -1232,7 +1232,7 @@ typedef float       (F_CALLBACK *FMOD_3D_ROLLOFF_CALLBACK)      (FMOD_CHANNELCON
     FMOD_ADVANCEDSETINGS
 ]
 */
-typedef enum FMOD_DSP_RESAMPLER
+typedef enum
 {
     FMOD_DSP_RESAMPLER_DEFAULT,         /* Default interpolation method.  Currently equal to FMOD_DSP_RESAMPLER_LINEAR. */
     FMOD_DSP_RESAMPLER_NOINTERP,        /* No interpolation.  High frequency aliasing hiss will be audible depending on the sample rate of the sound. */
@@ -1282,7 +1282,7 @@ typedef enum FMOD_DSP_RESAMPLER
     DSPConnection::getType
 ]
 */
-typedef enum FMOD_DSPCONNECTION_TYPE
+typedef enum
 {
     FMOD_DSPCONNECTION_TYPE_STANDARD,          /* Default connection type.         Audio is mixed from the input to the output DSP's audible buffer.  */
     FMOD_DSPCONNECTION_TYPE_SIDECHAIN,         /* Sidechain connection type.       Audio is mixed from the input to the output DSP's sidechain buffer.  */
@@ -1311,7 +1311,7 @@ typedef enum FMOD_DSPCONNECTION_TYPE
     FMOD_TAG
 ]
 */
-typedef enum FMOD_TAGTYPE
+typedef enum
 {
     FMOD_TAGTYPE_UNKNOWN = 0,
     FMOD_TAGTYPE_ID3V1,
@@ -1345,7 +1345,7 @@ typedef enum FMOD_TAGTYPE
     FMOD_TAG
 ]
 */
-typedef enum FMOD_TAGDATATYPE
+typedef enum
 {
     FMOD_TAGDATATYPE_BINARY = 0,        /* Raw binary data. see FMOD_TAG structure for length of data in bytes. */
     FMOD_TAGDATATYPE_INT,               /* Integer - Note this integer could be 8bit / 16bit / 32bit / 64bit.  See FMOD_TAG structure for integer size (1 vs 2 vs 4 vs 8 bytes). */
